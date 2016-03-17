@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Myblog</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+<footer>
+  <p>
+    <%= link_to "カテゴリ作成", new_category_path %>
+  </p>
+  <p>
+    <%= link_to "新規記事作成", new_article_path %>
+  </p>
+  <p>
+  <%= link_to "Home", articles_path %>
+  </p>
+</footer>
+</html>

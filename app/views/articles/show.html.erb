@@ -1,0 +1,19 @@
+<h1>
+  <%= @article.title %>
+</h1>
+
+<p>本文</p>
+<%= @article.body %>
+
+<p>
+  <strong>Image:</strong>
+  <% if @article.picture? %>
+    <div class="thumbnail">
+      <%= image_tag @article.picture.url %>
+    </div>
+<% end %>
+</p>
+
+<p>カテゴリ</p>
+<%= @category.name %>
+

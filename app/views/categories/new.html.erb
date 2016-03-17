@@ -1,0 +1,28 @@
+<h1>カテゴリ作成</h1>
+
+<% if @category.errors.any? %>
+    <%= @category.errors.count %>件のエラーがあります。
+    <ul>
+      <% @category.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+      <% end %>
+    </ul>
+
+<% end %>
+
+<%= form_for @category do |f| %>
+    <p>
+      <%= f.label :name, "CategoryName" %><br>
+      <%= f.text_field :name %>
+    </p>
+
+    <p>
+      <%= f.submit("追加") %>
+    </p>
+<% end %>
+<p>
+  カテゴリ一覧 :
+<% @categories.each do |category| %>
+  <%= category.name %>,
+<% end %>
+</p>
