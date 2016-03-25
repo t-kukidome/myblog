@@ -5,10 +5,14 @@
     <ul>
       <% @category.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
+
       <% end %>
     </ul>
-
 <% end %>
+    カテゴリ一覧 :
+    <% @categories.each do |category| %>
+        <%= category.name %>,
+    <% end %>
 
 <%= form_for @category do |f| %>
     <p>
@@ -20,9 +24,4 @@
       <%= f.submit("追加") %>
     </p>
 <% end %>
-<p>
-  カテゴリ一覧 :
-<% @categories.each do |category| %>
-  <%= category.name %>,
-<% end %>
-</p>
+

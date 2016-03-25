@@ -7,8 +7,8 @@
 
       <% end %>
     </ul>
-
 <% end %>
+
 <%= form_for @article do |f| %>
     <p>
       <%= f.label :title, "タイトル" %><br>
@@ -29,12 +29,13 @@
       <%= f.label :picture %><br>
       <%= f.file_field :picture %>
     </div>
-    <div class="field">
 
-    <p>
-     <%= f.label :category_id, "カテゴリ選択" %>
-     <%= f.collection_select :category_id, Category.all, :id, :name %>
-    </p>
+    <div class="field">
+      <p>
+       <%= f.label :category_id, "カテゴリ選択" %>
+       <%= f.collection_select :category_id, Category.all, :id, :name %>
+      </p>
+    </div>
 
     <p>
       <%= f.submit("投稿") %>

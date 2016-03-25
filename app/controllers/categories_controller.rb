@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
 
   def index
-
+    redirect_to articles_path
   end
 
   def new
@@ -13,9 +13,11 @@ class CategoriesController < ApplicationController
     @category = Category.new(category_params)
     if @category.save
       redirect_to new_category_path
+      #redirect_to articles_path
     else
       p @category.errors.messages
       render 'new'
+      #redirect_to new_category_path
     end
   end
 

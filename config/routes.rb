@@ -1,14 +1,13 @@
 Rails.application.routes.draw do
 
+  #resources :users do
+  #  resources :articles
+  #end
+  resources :users
   resources :articles
 
-  resources :categories do
-    resources :articles
-  end
+  resources :categories
 
-  resources :articles do
-    resources :categories
-  end
 
 
   root 'articles#index'

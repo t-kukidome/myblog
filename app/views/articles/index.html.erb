@@ -1,6 +1,17 @@
 <h1>日記一覧</h1>
+
+<p>
+  <% if params[:search].blank? == false  %>
+      テキスト検索 "<%= params[:search] %>"
+  <% end %>
+
+</p>
+  <% if @category %>
+      カテゴリ検索 "<%= @category.name %>"
+  <% end %>
+
 <ul>
-  <% @pages.each do |article| %>
+  <% @articles.each do |article| %>
       <li>
         <%= link_to article.title, article_path(article.id) %>
         <%= link_to "[Edit]", edit_article_path(article.id) %>
@@ -11,6 +22,18 @@
 
 </ul>
 
+<%= form_tag articles_path, :method => 'get' do %>
+    テキスト<%= text_field_tag 'q[search]', params[:placeholder] = params[:q] && params[:q][:search] || '' %> <!-- ここで入力した文字列を params[:search]の値とする  Parameters: {"search" => "入力した値"} -->
+    カテゴリ<%= select_tag('q[csearch]', options_for_select(Category.pluck(:name, :id)), :include_blank => true) %>
+    <%= submit_tag "Search", :category_id => nil %>
+<% end %>
 <p>
-  <%= paginate(@pages) %>
+  <%= link_to "カテゴリ作成", new_category_path %>
+</p>
+<p>
+  <%= link_to "新規記事作成", new_article_path %>
+</p>
+
+<p>
+  <%= paginate(@articles) %>
 </p>

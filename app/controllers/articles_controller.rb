@@ -1,8 +1,26 @@
 class ArticlesController < ApplicationController
 
   def index
-    @articles = Article.all
-    @pages = Article.page(params[:page]).per(10).order(:id)
+    @articles = Article.page(params[:page]).per(10).order(:id)
+    @sarticles = Article.all
+    c = params[:q]
+    p params[:q]
+    return if c.blank?
+    if c[:search].blank? == false #まずはsearchに値が入ってるかどうか
+      if @sarticles.where(['title like ?', "%#{c[:search]}%"]).empty? == false  #title上で検索してヒットしたら格納されるので、空じゃなかったら
+         @sarticles = @sarticles.where(['title like ?', "%#{c[:search]}%"]).page(params[:page]).per(10).order(:id)
+         @articles = @sarticles
+      else
+         @sarticles = @sarticles.where(['body like ?', "%#{c[:search]}%"]).page(params[:page]).per(10).order(:id)
+         @articles = @sarticles
+      end
+    end
+
+    if c[:csearch].blank? == false
+      @articles = @articles.where("category_id = '#{c[:csearch]}'").page(params[:page]).per(10).order(:id)
+      #@articles = @sarticles
+      @category = Category.find(c[:csearch])
+    end
   end
 
   def show
@@ -42,6 +60,14 @@ class ArticlesController < ApplicationController
     @article = Article.find(params[:id])
     @article.destroy
     redirect_to articles_path
+  end
+
+  def search
+    @article = Article.search(params[:search])
+  end
+
+  def bsearch
+    @article = Article.bsearch(params[:bsearch])
   end
 
   private
