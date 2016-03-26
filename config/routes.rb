@@ -3,10 +3,7 @@ Rails.application.routes.draw do
   devise_for :users
   get 'home/index'
   root 'home#index'
-  #resources :users do
-  #  resources :articles
-  #end
-  resources :users
+
   resources :articles
 
   resources :categories

@@ -4,7 +4,7 @@ class ArticlesController < ApplicationController
     @articles = Article.page(params[:page]).per(10).order(:id)
     @sarticles = Article.all
     c = params[:q]
-    p params[:q]
+    #p params[:q]
     return if c.blank?
     if c[:search].blank? == false #まずはsearchに値が入ってるかどうか
       if @sarticles.where(['title like ?', "%#{c[:search]}%"]).empty? == false  #title上で検索してヒットしたら格納されるので、空じゃなかったら
