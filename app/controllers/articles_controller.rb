@@ -5,7 +5,17 @@ class ArticlesController < ApplicationController
     @sarticles = Article.all
     c = params[:q]
     #p params[:q]
+    p params[:mysearch]
     if params[:mysearch].blank? == false
+      p "aaaaaa"
+      if @articles.where(['title like ?', "%#{params[:mysearch]}%"]).empty? == false  #title上で検索してヒットしたら格納されるので、空じゃなかったら
+        @articles = @articles.where(['title like ?', "%#{params[:mysearch]}%"]).page(params[:page]).per(10).order(:id)
+        @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
+      else
+        @articles = @articles.where(['body like ?', "%#{params[:mysearch]}%"]).page(params[:page]).per(10).order(:id)
+        @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
+      end
+    elsif params[:mysearch] == ""
       @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
     end
 
@@ -15,7 +25,7 @@ class ArticlesController < ApplicationController
          @sarticles = @sarticles.where(['title like ?', "%#{c[:search]}%"]).page(params[:page]).per(10).order(:id)
          @articles = @sarticles
       else
-         @sarticles = @sarticles.where(['body like ?', "%#{c[:search]}%"]).page(params[:page]).per(10).order(:id)
+        @sarticles = @sarticles.where(['body like ?', "%#{c[:search]}%"]).page(params[:page]).per(10).order(:id)
          @articles = @sarticles
       end
     end

@@ -1,6 +1,7 @@
 <h1>全記事一覧</h1>
 <%= form_tag articles_path, :method => 'get' do %>
-    <%= submit_tag "my記事検索", name: "mysearch" %>
+    <%= text_field_tag :mysearch, params[:placeholder] = params[:mysearch] %>
+    <%= submit_tag "my記事検索" %>
 <% end %>
 <p>
   <% if params[:q].blank? == false  %>
