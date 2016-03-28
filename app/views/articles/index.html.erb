@@ -1,13 +1,9 @@
 <h1>全記事一覧</h1>
 <%= form_tag articles_path, :method => 'get' do %>
     <%= text_field_tag :mysearch, params[:placeholder] = params[:mysearch] %>
-    <%= submit_tag "my記事検索" %>
+    <%= submit_tag "my Article Search" %>
 <% end %>
 <p>
-  <% if params[:q].blank? == false  %>
-      テキスト検索 "<%= params[:q][:search] %>"
-  <% end %>
-
 </p>
   <% if @category %>
       カテゴリ検索 "<%= @category.name %>"

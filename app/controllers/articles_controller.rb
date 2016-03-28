@@ -7,7 +7,7 @@ class ArticlesController < ApplicationController
     #p params[:q]
     p params[:mysearch]
     if params[:mysearch].blank? == false
-      p "aaaaaa"
+      #p "aaaaaa"
       if @articles.where(['title like ?', "%#{params[:mysearch]}%"]).empty? == false  #title上で検索してヒットしたら格納されるので、空じゃなかったら
         @articles = @articles.where(['title like ?', "%#{params[:mysearch]}%"]).page(params[:page]).per(10).order(:id)
         @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
@@ -61,7 +61,12 @@ class ArticlesController < ApplicationController
   end
 
   def edit
+    if current_user.id != Article.find(params[:id]).userid
+      redirect_to new_user_session_path
+    else
      @article = Article.find(params[:id])
+    end
+
   end
 
   def update
@@ -77,14 +82,6 @@ class ArticlesController < ApplicationController
     @article = Article.find(params[:id])
     @article.destroy
     redirect_to articles_path
-  end
-
-  def search
-    @article = Article.search(params[:search])
-  end
-
-  def bsearch
-    @article = Article.bsearch(params[:bsearch])
   end
 
   private
