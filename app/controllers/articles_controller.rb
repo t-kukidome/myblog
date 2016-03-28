@@ -5,6 +5,10 @@ class ArticlesController < ApplicationController
     @sarticles = Article.all
     c = params[:q]
     #p params[:q]
+    if params[:mysearch].blank? == false
+      @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
+    end
+
     return if c.blank?
     if c[:search].blank? == false #まずはsearchに値が入ってるかどうか
       if @sarticles.where(['title like ?', "%#{c[:search]}%"]).empty? == false  #title上で検索してヒットしたら格納されるので、空じゃなかったら
@@ -21,6 +25,7 @@ class ArticlesController < ApplicationController
       #@articles = @sarticles
       @category = Category.find(c[:csearch])
     end
+
   end
 
   def show
@@ -30,11 +35,13 @@ class ArticlesController < ApplicationController
 
   def new
     @article = Article.new
+    @user = User.new
   end
 
   def create
     #p Article.new(blog_params)
     @article = Article.new(article_params)
+    @article.userid = current_user.id
     if @article.save
       redirect_to articles_path
     else
@@ -73,7 +80,7 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params[:article].permit(:title, :body, :category_id, :picture)
+    params[:article].permit(:title, :body, :category_id, :picture, :userid)
   end
 
 

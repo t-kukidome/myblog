@@ -1,8 +1,10 @@
-<h1>日記一覧</h1>
-
+<h1>全記事一覧</h1>
+<%= form_tag articles_path, :method => 'get' do %>
+    <%= submit_tag "my記事検索", name: "mysearch" %>
+<% end %>
 <p>
-  <% if params[:search].blank? == false  %>
-      テキスト検索 "<%= params[:search] %>"
+  <% if params[:q].blank? == false  %>
+      テキスト検索 "<%= params[:q][:search] %>"
   <% end %>
 
 </p>
@@ -14,9 +16,12 @@
   <% @articles.each do |article| %>
       <li>
         <%= link_to article.title, article_path(article.id) %>
-        <%= link_to "[Edit]", edit_article_path(article.id) %>
-        <%= link_to "[Delete]", article_path(article.id), method: :delete, data: {
-            confirm: "are you sure?"} %>
+
+        <% if current_user.id == article.userid %>
+            <%= link_to "[Edit]", edit_article_path(article.id) %>
+            <%= link_to "[Delete]", article_path(article.id), method: :delete, data: {
+                confirm: "are you sure?"} %>
+        <% end %>
       </li>
   <% end %>
 
@@ -25,8 +30,8 @@
 <%= form_tag articles_path, :method => 'get' do %>
     テキスト<%= text_field_tag 'q[search]', params[:placeholder] = params[:q] && params[:q][:search] || '' %> <!-- ここで入力した文字列を params[:search]の値とする  Parameters: {"search" => "入力した値"} -->
     カテゴリ<%= select_tag('q[csearch]', options_for_select(Category.pluck(:name, :id)), :include_blank => true) %>
-    <%= submit_tag "Search", :category_id => nil %>
-<% end %>
+    <%= submit_tag "Search" %>
+<% end %><br>
 <p>
   <%= link_to "カテゴリ作成", new_category_path %>
 </p>
