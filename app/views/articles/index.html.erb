@@ -1,4 +1,5 @@
-<h1>全記事一覧</h1>
+<h1 class="text-center">全記事一覧</h1>
+<div class="container">
 <% if user_signed_in? %>
   <%= form_tag articles_path, :method => 'get' do %>
       <%= text_field_tag :mysearch, params[:placeholder] = params[:mysearch] %>
@@ -10,28 +11,48 @@
       カテゴリ検索 "<%= @category.name %>"
   <% end %>
 
-<ul>
-  <% @articles.each do |article| %>
-      <li>
-        <%= article.title %>
-        <% if user_signed_in? %>
-          <% if current_user.id == article.userid %>
-              <%= link_to "[Edit]", edit_article_path(article.id) %>
-              <%= link_to "[Delete]", article_path(article.id), method: :delete, data: {
-                  confirm: "are you sure?"} %>
-          <% end %>
-        <% end %>
-        (author:<%= User.find(article.userid).email %>)
-        <% if article.body.size > 15 %>
-            <%= article.body.truncate(15) %>
-            <%= link_to "(read more)", article_path(article.id) %>
-        <% else %>
-            <%= article.body %>
-        <% end %>
-      </li>
-  <% end %>
 
-</ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Content</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @articles.each do |article| %>
+      <tr>
+          <td>
+              <%= article.title %>
+              <% if user_signed_in? %>
+                  <% if current_user.id == article.userid %>
+                      <%= link_to "[Edit]", edit_article_path(article.id) %>
+                      <%= link_to "[Delete]", article_path(article.id), method: :delete, data: {
+                          confirm: "are you sure?"} %>
+                  <% end %>
+              <% end %>
+          </td>
+          <td>
+             <%= User.find(article.userid).email %>
+          </td>
+          <td>
+            <% if article.body.size > 15 %>
+                <%= article.body.truncate(15) %>
+                <%= link_to "(read more)", article_path(article.id) %>
+            <% else %>
+                <%= article.body %>
+            <% end %>
+          </td>
+      </tr>
+      <% end %>
+
+    </tbody>
+
+  </table>
+
+  <%= paginate(@articles) %>
+
 
 <%= form_tag articles_path, :method => 'get' do %>
     テキスト<%= text_field_tag 'q[search]', params[:placeholder] = params[:q] && params[:q][:search] || '' %> <!-- ここで入力した文字列を params[:search]の値とする  Parameters: {"search" => "入力した値"} -->
@@ -44,7 +65,4 @@
 <p>
   <%= link_to "新規記事作成", new_article_path %>
 </p>
-
-<p>
-  <%= paginate(@articles) %>
-</p>
+</div>
