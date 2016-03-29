@@ -1,8 +1,11 @@
 class ArticlesController < ApplicationController
 
+  before_action :authenticate_user!,  except: [:index, :show]
+
   def index
     @articles = Article.page(params[:page]).per(10).order(:id)
     @sarticles = Article.all
+    @users =
     c = params[:q]
     #p params[:q]
     p params[:mysearch]
@@ -62,7 +65,8 @@ class ArticlesController < ApplicationController
 
   def edit
     if current_user.id != Article.find(params[:id]).userid
-      redirect_to new_user_session_path
+
+      redirect_to articles_path
     else
      @article = Article.find(params[:id])
     end

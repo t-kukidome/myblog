@@ -1,10 +1,11 @@
 <h1>全記事一覧</h1>
-<%= form_tag articles_path, :method => 'get' do %>
-    <%= text_field_tag :mysearch, params[:placeholder] = params[:mysearch] %>
-    <%= submit_tag "my Article Search" %>
+<% if user_signed_in? %>
+  <%= form_tag articles_path, :method => 'get' do %>
+      <%= text_field_tag :mysearch, params[:placeholder] = params[:mysearch] %>
+      <%= submit_tag "my Article Search" %>
+   <% end %>
 <% end %>
-<p>
-</p>
+
   <% if @category %>
       カテゴリ検索 "<%= @category.name %>"
   <% end %>
@@ -12,12 +13,20 @@
 <ul>
   <% @articles.each do |article| %>
       <li>
-        <%= link_to article.title, article_path(article.id) %>
-
-        <% if current_user.id == article.userid %>
-            <%= link_to "[Edit]", edit_article_path(article.id) %>
-            <%= link_to "[Delete]", article_path(article.id), method: :delete, data: {
-                confirm: "are you sure?"} %>
+        <%= article.title %>
+        <% if user_signed_in? %>
+          <% if current_user.id == article.userid %>
+              <%= link_to "[Edit]", edit_article_path(article.id) %>
+              <%= link_to "[Delete]", article_path(article.id), method: :delete, data: {
+                  confirm: "are you sure?"} %>
+          <% end %>
+        <% end %>
+        (author:<%= User.find(article.userid).email %>)
+        <% if article.body.size > 15 %>
+            <%= article.body.truncate(15) %>
+            <%= link_to "(read more)", article_path(article.id) %>
+        <% else %>
+            <%= article.body %>
         <% end %>
       </li>
   <% end %>
