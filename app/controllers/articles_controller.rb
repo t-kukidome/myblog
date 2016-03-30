@@ -5,12 +5,13 @@ class ArticlesController < ApplicationController
   def index
     @articles = Article.page(params[:page]).per(10).order(:id)
     @sarticles = Article.all
-    @users =
     c = params[:q]
     #p params[:q]
     p params[:mysearch]
+=begin
     if params[:mysearch].blank? == false
       #p "aaaaaa"
+
       if @articles.where(['title like ?', "%#{params[:mysearch]}%"]).empty? == false  #title上で検索してヒットしたら格納されるので、空じゃなかったら
         @articles = @articles.where(['title like ?', "%#{params[:mysearch]}%"]).page(params[:page]).per(10).order(:id)
         @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
@@ -20,8 +21,12 @@ class ArticlesController < ApplicationController
       end
     elsif params[:mysearch] == ""
       @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
-    end
+      end
+=end
+    if params[:mysearch]
+      @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
 
+    end
     return if c.blank?
     if c[:search].blank? == false #まずはsearchに値が入ってるかどうか
       if @sarticles.where(['title like ?', "%#{c[:search]}%"]).empty? == false  #title上で検索してヒットしたら格納されるので、空じゃなかったら

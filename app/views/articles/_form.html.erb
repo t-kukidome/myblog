@@ -1,4 +1,5 @@
 <!-- エラーメッセージ -->
+<!--
 <% if @article.errors.any? %>
     <%= @article.errors.count %>件のエラーがあります。
     <ul>
@@ -8,14 +9,14 @@
       <% end %>
     </ul>
 <% end %>
+-->
 <div class="container">
-
 <%= form_for @article do |f| %>
+
     <p>
       <%= f.label :title, "タイトル" %><br>
       <%= f.text_field :title %>
     </p>
-
     <p>
       <%= f.label :body, "本文" %><br>
       <%= f.text_area :body, :size => "20x10" %>
@@ -41,5 +42,6 @@
     <p>
       <%= f.submit("投稿") %>
     </p>
+
 <% end %>
 </div>

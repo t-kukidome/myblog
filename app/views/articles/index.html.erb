@@ -1,68 +1,59 @@
 <h1 class="text-center">全記事一覧</h1>
 <div class="container">
-<% if user_signed_in? %>
-  <%= form_tag articles_path, :method => 'get' do %>
-      <%= text_field_tag :mysearch, params[:placeholder] = params[:mysearch] %>
-      <%= submit_tag "my Article Search" %>
-   <% end %>
-<% end %>
-
-  <% if @category %>
-      カテゴリ検索 "<%= @category.name %>"
-  <% end %>
-
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Content</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @articles.each do |article| %>
-      <tr>
-          <td>
-              <%= article.title %>
-              <% if user_signed_in? %>
-                  <% if current_user.id == article.userid %>
-                      <%= link_to "[Edit]", edit_article_path(article.id) %>
-                      <%= link_to "[Delete]", article_path(article.id), method: :delete, data: {
-                          confirm: "are you sure?"} %>
-                  <% end %>
-              <% end %>
-          </td>
-          <td>
-             <%= User.find(article.userid).email %>
-          </td>
-          <td>
-            <% if article.body.size > 15 %>
-                <%= article.body.truncate(15) %>
-                <%= link_to "(read more)", article_path(article.id) %>
-            <% else %>
-                <%= article.body %>
-            <% end %>
-          </td>
-      </tr>
+  <div class="row">
+      <% if @category %>
+          カテゴリ検索 "<%= @category.name %>"
       <% end %>
 
-    </tbody>
+    <div class="col-xs-10 col-xs-offset-1">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><h3>Title</h3></th>
+            <th><h3>Author</h3></th>
+            <th><h3>Content</h3></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @articles.each do |article| %>
+          <tr>
+              <td>
+                  <%= article.title %>
+                  <% if user_signed_in? %>
+                      <% if current_user.id == article.userid %>
+                          <%= link_to "[Edit]", edit_article_path(article.id) %>
+                          <%= link_to "[Delete]", article_path(article.id), method: :delete, data: {
+                              confirm: "are you sure?"} %>
+                      <% end %>
+                  <% end %>
+              </td>
+              <td>
+                 <%= User.find(article.userid).email %>
+              </td>
+              <td>
+                <% if article.body.size > 15 %>
+                    <%= article.body.truncate(15) %>
+                    <%= link_to "(read more)", article_path(article.id) %>
+                <% else %>
+                    <%= article.body %>
+                <% end %>
+              </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-10 col-xs-offset-1">
+        <%= paginate(@articles) %>
+    </div>
+  </div>
+</div>
 
-  </table>
-
-  <%= paginate(@articles) %>
-
-
-<%= form_tag articles_path, :method => 'get' do %>
-    テキスト<%= text_field_tag 'q[search]', params[:placeholder] = params[:q] && params[:q][:search] || '' %> <!-- ここで入力した文字列を params[:search]の値とする  Parameters: {"search" => "入力した値"} -->
-    カテゴリ<%= select_tag('q[csearch]', options_for_select(Category.pluck(:name, :id)), :include_blank => true) %>
-    <%= submit_tag "Search" %>
-<% end %><br>
 <p>
   <%= link_to "カテゴリ作成", new_category_path %>
 </p>
-<p>
-  <%= link_to "新規記事作成", new_article_path %>
-</p>
+
 </div>
