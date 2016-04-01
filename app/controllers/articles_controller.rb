@@ -3,8 +3,11 @@ class ArticlesController < ApplicationController
   before_action :authenticate_user!,  except: [:index, :show]
 
   def index
-    @articles = Article.page(params[:page]).per(10).order(:id)
+    require "time"
+
+    @articles = Article.page(params[:page]).per(10).order(:id).reverse_order
     @sarticles = Article.all
+    @nowtime = Time.now
     c = params[:q]
     #p params[:q]
     p params[:mysearch]

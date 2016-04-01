@@ -14,15 +14,17 @@
       <ul class="nav navbar-nav">
         <!--<li><%= link_to articles_path do %><i class="glyphicon glyphicon-home"></i>home<% end %></li>-->
         <li><%= link_to 'Home', articles_path, class:'glyphicon glyphicon-home' %></li>
-        <li class="active"><%= link_to "新規記事作成", new_article_path %></li>
+        <li class="active"><%= link_to "Create Article", new_article_path %></li>
       </ul>
 
-      <%= form_tag  articles_path, :method => 'get', class: "navbar-form navbar-left" do %>
-          <%= text_field_tag 'q[search]', params[:placeholder] = params[:q] && params[:q][:search] || '' %>
-          <%= select_tag('q[csearch]', options_for_select(Category.pluck(:name, :id)), :include_blank => "カテゴリ") %>
-          <%= submit_tag "Search", class: "btn btn-primary" %>
-      <% end %>
-
+          <%= form_tag  articles_path, :method => 'get', class: "navbar-form navbar-left" do %>
+            <%= text_field_tag('q[search]',value: nil, placeholder: "Search Word...", class: "form-control") %>
+            <%= select_tag('q[csearch]', options_for_select(Category.pluck(:name, :id)), :include_blank => "Select Category",
+                           :class => "btn btn-default btn-lg dropdown-toggle") %>
+          <div class="btn-group btn-group-sm">
+            <%= submit_tag "Search", class: "btn btn-primary" %>
+          </div>
+          <% end %>
       <div class="navbar-text navbar-right">
             <% if user_signed_in? %>
                 Welcome <strong><%= current_user.username %></strong>.

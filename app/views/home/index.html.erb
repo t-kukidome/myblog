@@ -2,13 +2,13 @@
 <p>登録者リスト</p>
 <ul>
   <% @users.each do |user| %>
-      <li><%= user.id %> : <%= user.email %></li>
+      <li><%= user.id %>. <%= user.username %> : <%= user.email %></li>
   <% end %>
 </ul>
 
 <p>今ログインしてるユーザー</p>
 <% if user_signed_in? %>
-  <%= current_user.id %> : <%= current_user.email %>
+  <%= current_user.id %>. <%= current_user.username %> : <%= current_user.email %>
 <% else  %>
     None
 <% end %>

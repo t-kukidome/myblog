@@ -1,4 +1,4 @@
-<h1 class="text-center">全記事一覧</h1>
+<h1 class="text-center">Articles</h1>
 <div class="container">
   <div class="row">
       <% if @category %>
@@ -9,21 +9,30 @@
       <table class="table table-striped">
         <thead>
           <tr>
+            <th style="border-bottom: none"><h3></h3></th>
             <th><h3>Title</h3></th>
             <th><h3>Author</h3></th>
             <th><h3>Content</h3></th>
+            <th><h3>Date</h3></th>
           </tr>
         </thead>
         <tbody>
           <% @articles.each do |article| %>
           <tr>
+              <td style="background: white; border-bottom: none; border-top: none; padding: 0px">
+                <% if Time.zone.yesterday < article.created_at  %>
+                   <%= image_tag 'new.png', size: "45x30", class: "img-responsive" %>
+                <% end %>
+              </td>
               <td>
                   <%= link_to article.title, article_path(article.id) %>
                   <% if user_signed_in? %>
-                      <% if current_user.id == article.userid %>
-                          <%= link_to "[Edit]", edit_article_path(article.id) %>
-                          <%= link_to "[Delete]", article_path(article.id), method: :delete, data: {
+                      <% if current_user.id == article.userid %><br>
+                        <div class="btn-group btn-group-xs">
+                          <%= link_to "Edit", edit_article_path(article.id), :class => "btn btn-warning" %>
+                          <%= link_to "Delete", article_path(article.id), :class => "btn btn-danger", method: :delete, data: {
                               confirm: "are you sure?"} %>
+                        </div>
                       <% end %>
                   <% end %>
               </td>
@@ -38,15 +47,18 @@
                     <%= article.body %>
                 <% end %>
               </td>
+              <td>
+                <%= Article.find(article.id).created_at.strftime("%Y-%m-%d<br/>%H:%M:%S").html_safe %>
+              </td>
           </tr>
           <% end %>
         </tbody>
       </table>
       <div class="pull-right">
         <% if user_signed_in? %>
-            <%= form_tag articles_path, :method => 'get', class: "navbar-form navbar-left" do %>
+            <%= form_tag articles_path, :method => 'get', class: "pull-right" do %>
                 <!--<%= text_field_tag :mysearch, params[:placeholder] = params[:mysearch] %>-->
-                <%= submit_tag "my Article Search",name: "mysearch", :class => 'btn btn-warning' %>
+                <%= submit_tag "my Article Search",name: "mysearch", :class => 'btn btn-info' %>
             <% end %>
         <% end %>
       </div>
