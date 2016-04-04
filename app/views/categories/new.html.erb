@@ -1,18 +1,22 @@
-<h1>カテゴリ作成</h1>
+<h1>カテゴリ編集</h1>
 
 <% if @category.errors.any? %>
     <%= @category.errors.count %>件のエラーがあります。
     <ul>
       <% @category.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
-
       <% end %>
     </ul>
 <% end %>
-    カテゴリ一覧 :
-    <% @categories.each do |category| %>
-        <%= category.name %>,
+
+    <% @categories.find_each(batch_size: 10) do |category| %>
+        <%= category.id %>: <%= category.name %>
+        <div class="btn-group btn-group-xs">
+          <%= link_to "Delete", category_path(category.id), :class => "btn btn-danger", method: :delete, data: {
+              confirm: "are you sure?"} %>
+        </div>
     <% end %>
+
 
 <%= form_for @category do |f| %>
     <p>
@@ -24,4 +28,3 @@
       <%= f.submit("追加") %>
     </p>
 <% end %>
-

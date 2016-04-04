@@ -3,47 +3,28 @@ class ArticlesController < ApplicationController
   before_action :authenticate_user!,  except: [:index, :show]
 
   def index
-    require "time"
-
     @articles = Article.page(params[:page]).per(10).order(:id).reverse_order
     @sarticles = Article.all
-    @nowtime = Time.now
     c = params[:q]
-    #p params[:q]
-    p params[:mysearch]
-=begin
-    if params[:mysearch].blank? == false
-      #p "aaaaaa"
-
-      if @articles.where(['title like ?', "%#{params[:mysearch]}%"]).empty? == false  #title上で検索してヒットしたら格納されるので、空じゃなかったら
-        @articles = @articles.where(['title like ?', "%#{params[:mysearch]}%"]).page(params[:page]).per(10).order(:id)
-        @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
-      else
-        @articles = @articles.where(['body like ?', "%#{params[:mysearch]}%"]).page(params[:page]).per(10).order(:id)
-        @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
-      end
-    elsif params[:mysearch] == ""
-      @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
-      end
-=end
     if params[:mysearch]
-      @articles = @articles.where("userid = '#{current_user.id}'").page(params[:page]).per(10).order(:id)
-
+      @articles = @articles.where("userid = ?", current_user.id).page(params[:page]).per(10).order(:id)
     end
     return if c.blank?
-    if c[:search].blank? == false #まずはsearchに値が入ってるかどうか
-      if @sarticles.where(['title like ?', "%#{c[:search]}%"]).empty? == false  #title上で検索してヒットしたら格納されるので、空じゃなかったら
-         @sarticles = @sarticles.where(['title like ?', "%#{c[:search]}%"]).page(params[:page]).per(10).order(:id)
-         @articles = @sarticles
-      else
-        @sarticles = @sarticles.where(['body like ?', "%#{c[:search]}%"]).page(params[:page]).per(10).order(:id)
-         @articles = @sarticles
-      end
+    if c[:search] #まずはsearchに値が入ってるかどうか
+      #if @sarticles.where('title like ? or body like ?', c[:search], c[:search]).empty? == false  #title上で検索してヒットしたら格納されるので、空じゃなかったら
+         #@sarticles = @sarticles.where(['title like ?', "%#{c[:search]}%"]).page(params[:page]).per(10).order(:id)
+         p c[:search]
+         @articles = @articles.where("title LIKE ? OR body LIKE ?", "%#{c[:search]}%", "%#{c[:search]}%").page(params[:page]).per(10).order(:id)
+         #@articles = @sarticles
+      #end
+      #if @sarticles.where(['body like ?', "%#{c[:search]}%"]).empty? == false
+      # @sarticles = @sarticles.where(['body like ?', "%#{c[:search]}%"]).page(params[:page]).per(10).order(:id)
+      # @articles = @sarticles
+      #end
     end
 
     if c[:csearch].blank? == false
-      @articles = @articles.where("category_id = '#{c[:csearch]}'").page(params[:page]).per(10).order(:id)
-      #@articles = @sarticles
+      @articles = @articles.where("category_id = ?", c[:csearch]).page(params[:page]).per(10).order(:id)
       @category = Category.find(c[:csearch])
     end
 
@@ -52,33 +33,41 @@ class ArticlesController < ApplicationController
   def show
     @article = Article.find(params[:id])
     @category = Category.find(@article.category_id)
+    @user = User.find(@article.userid)
   end
 
   def new
     @article = Article.new
     @user = User.new
+    @category = Category.new
   end
 
   def create
-    #p Article.new(blog_params)
+
     @article = Article.new(article_params)
     @article.userid = current_user.id
+    #@category = Category.new(category_params)
+    #if @category.save
+    #  p "category saved from article model"
+    #  redirect_to new_article_path
+    #else
+    #  p "category not save from article model"
+    #end
+
     if @article.save
-      redirect_to articles_path
+      redirect_to articles_path, notice: "Article Created"
     else
       render 'new'
-      #@article.errors.inspect
+      p  "article not save"
     end
   end
 
   def edit
     if current_user.id != Article.find(params[:id]).userid
-
-      redirect_to articles_path
+        redirect_to articles_path, alert: "You cannot edit this article."
     else
      @article = Article.find(params[:id])
     end
-
   end
 
   def update
@@ -102,5 +91,7 @@ class ArticlesController < ApplicationController
     params[:article].permit(:title, :body, :category_id, :picture, :userid)
   end
 
-
+  def category_params
+    params[:category].permit(:name)
+  end
 end

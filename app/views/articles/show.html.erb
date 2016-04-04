@@ -1,19 +1,17 @@
-<h1>
-  <%= @article.title %>
-</h1>
-
-<p>本文</p>
+<h4>
+  Title<small>(author : <%= @user.username %>)</small><br/>
+</h4>
+  <%=@article.title %><br/>
+<h4>Content</h4>
 <%= @article.body %>
 
-<p>
-  <strong>Image:</strong>
+
+<h4>Image</h4>
   <% if @article.picture? %>
-    <div class="thumbnail">
-      <%= image_tag @article.picture.url %>
-    </div>
-<% end %>
-</p>
+    <%= image_tag @article.picture.url ,size: "200x200" %>
+  <% else %>
+    none
+  <% end %>
 
-<p>カテゴリ</p>
+<h4>Category</h4>
 <%= @category.name %>
-
