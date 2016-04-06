@@ -12,17 +12,18 @@ class CategoriesController < ApplicationController
   end
 
   def create
-    @category = Category.new(:name => params[:add])
-
-    p "aaaaaa" + @category.name
+    #p params
+    @article = Article.first
+    @category = Category.new(:name => params[:add], :userid => current_user.id)
+    #@article = Article.new
     if @category.save
-      p "category saved from category model"
       redirect_to new_article_path
-      #redirect_to articles_path
+      p "category saved"
     else
-      p "category not saved from category model"
-      render 'new'
-      #redirect_to new_category_path
+      p @category.errors.messages
+      p "category not saved"
+      redirect_to new_article_path
+
     end
   end
 

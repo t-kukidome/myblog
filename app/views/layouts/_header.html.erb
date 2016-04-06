@@ -36,7 +36,7 @@
 
         <div class="navbar-text navbar-right">
                      <% if user_signed_in? %>
-                         Welcome <strong><%= current_user.username %> </strong>
+                         Welcome <strong style="color: purple"><%= current_user.username %> </strong>
                          <%= link_to "Settings", edit_user_registration_path, :class => "navbar-link" %> |
                          <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => "navbar-link" %>
                      <% else %>

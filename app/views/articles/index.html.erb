@@ -31,7 +31,7 @@
           <% @articles.each do |article| %>
           <tr>
               <td style="background: white; border-bottom: none; border-top: none; padding: 0px">
-                <% if Time.zone.yesterday < article.created_at  %>
+                <% if (Time.zone.now - article.created_at) < 10800  %>
                    <%= image_tag 'new.png', size: "45x30", class: "img-responsive" %>
                 <% end %>
               </td>
@@ -80,9 +80,4 @@
       </div>
   </div>
 </div>
-
-<p>
-  <%= link_to "カテゴリ編集", new_category_path %>
-</p>
-
 </div>

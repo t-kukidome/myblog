@@ -32,7 +32,7 @@ class ArticlesController < ApplicationController
 
   def show
     @article = Article.find(params[:id])
-    @category = Category.find(@article.category_id)
+    #@category = Category.find(@article.category_id)
     @user = User.find(@article.userid)
   end
 
@@ -43,23 +43,21 @@ class ArticlesController < ApplicationController
   end
 
   def create
-
+    p params
     @article = Article.new(article_params)
     @article.userid = current_user.id
-    #@category = Category.new(category_params)
-    #if @category.save
-    #  p "category saved from article model"
-    #  redirect_to new_article_path
-    #else
-    #  p "category not save from article model"
-    #end
 
-    if @article.save
-      redirect_to articles_path, notice: "Article Created"
-    else
-      render 'new'
-      p  "article not save"
-    end
+      if params[:addc]
+        p "aaaaaaaaaaaaaa"
+        @category = Category.new(:name => params[:addc], :userid => current_user.id)
+        @category.save
+        @article.category_id = @category.id
+      else
+        @article.category_id = params[:selectc]
+      end
+
+    @article.save
+    redirect_to articles_path, notice: "Article Created"
   end
 
   def edit
@@ -92,6 +90,6 @@ class ArticlesController < ApplicationController
   end
 
   def category_params
-    params[:category].permit(:name)
+    params[:category].permit(:name, :userid)
   end
 end

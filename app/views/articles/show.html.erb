@@ -14,4 +14,4 @@
   <% end %>
 
 <h4>Category</h4>
-<%= @category.name %>
+  <%= @article.category&.name || "カテゴリなし" %>
