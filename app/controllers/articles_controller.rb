@@ -46,27 +46,14 @@ class ArticlesController < ApplicationController
     p params
     @article = Article.new(article_params)
     @article.userid = current_user.id
-
-    if params[:addc]
-      if Category.all.where("name = ?", params[:addc])
-          p "existed"
-          p Category.all.where("name = ?", params[:addc])
-          @article.category_id = Category.all.where("name = ?", params[:addc]).pluck(:id)[0]
-      else
-          @category = Category.new(:name => params[:addc], :userid => current_user.id)
-          @category.save
-          @article.category_id = @category.id
-      end
-    else
-      @article.category_id = params[:selectc]
-    end
+    @category = params[:selectc].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find_by(params[:selectc])
+    @article.category_id = @category.id
 
     if @article.save
        redirect_to articles_path, notice: "Article Created"
     else
        render 'new'
     end
-
   end
 
   def edit
