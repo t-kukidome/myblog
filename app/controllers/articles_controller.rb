@@ -4,7 +4,7 @@ class ArticlesController < ApplicationController
 
   def index
     @articles = Article.page(params[:page]).per(10).order(:id).reverse_order
-    @sarticles = Article.all
+    #@sarticles = Article.all
     c = params[:q]
     if params[:mysearch]
       @articles = @articles.where("userid = ?", current_user.id).page(params[:page]).per(10).order(:id)
@@ -47,17 +47,26 @@ class ArticlesController < ApplicationController
     @article = Article.new(article_params)
     @article.userid = current_user.id
 
-      if params[:addc]
-        p "aaaaaaaaaaaaaa"
-        @category = Category.new(:name => params[:addc], :userid => current_user.id)
-        @category.save
-        @article.category_id = @category.id
+    if params[:addc]
+      if Category.all.where("name = ?", params[:addc])
+          p "existed"
+          p Category.all.where("name = ?", params[:addc])
+          @article.category_id = Category.all.where("name = ?", params[:addc]).pluck(:id)[0]
       else
-        @article.category_id = params[:selectc]
+          @category = Category.new(:name => params[:addc], :userid => current_user.id)
+          @category.save
+          @article.category_id = @category.id
       end
+    else
+      @article.category_id = params[:selectc]
+    end
 
-    @article.save
-    redirect_to articles_path, notice: "Article Created"
+    if @article.save
+       redirect_to articles_path, notice: "Article Created"
+    else
+       render 'new'
+    end
+
   end
 
   def edit
