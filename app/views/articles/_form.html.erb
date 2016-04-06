@@ -50,7 +50,7 @@
         <% categories_array = Category.all.map { |category| [category.name, category.id] } %>
         <% categories_array = categories_array + [["[Add Category]", 0]] %>
         <% options_for_select(categories_array) %><br/>
-        <%= select_tag('selectc', options_for_select(categories_array)) %>
+        <%= select_tag('selectc', options_for_select(categories_array), include_blank: true) %>
         <span id="addc" class="form-group"></span>
      </span>
    </div>
