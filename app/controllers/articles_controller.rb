@@ -46,7 +46,7 @@ class ArticlesController < ApplicationController
     p params
     @article = Article.new(article_params)
     @article.userid = current_user.id
-    @category = params[:selectc].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find_by(params[:selectc])
+    @category = params[:selectc].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find(params[:selectc].to_i)
     @article.category_id = @category.id
 
     if @article.save
