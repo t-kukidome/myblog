@@ -15,7 +15,6 @@ class ArticlesController < ApplicationController
       p "#{keyword_array}"
       @articles = @articles.where("title similar to :word OR body similar to :word", word: "%(#{keyword_array})%")
     end
-
     if c[:csearch].blank? == false
       @articles = @articles.where("category_id = ?", c[:csearch]).page(params[:page]).per(10).order(:id)
       @category = Category.find(c[:csearch])
@@ -34,11 +33,10 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    p params
     @article = Article.new(article_params)
     @article.userid = current_user.id
     @category = params[:selectc].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find(params[:selectc].to_i)
-    @article.category_id = @category.id
+    @article.category_id = @category.id || 0
 
     if @article.save
        redirect_to articles_path, notice: "Article Created"

@@ -5,16 +5,7 @@
 <% end %>
 
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-xs-3">
-        <% if @category %>
-        <div class="alert alert-info">
-            Category "<%= @category.name %>" Selected.
-        </div>
-        <% end %>
-    </div>
-
-    <div class="col-xs-10 col-xs-offset-1">
+  <div class="col-xs-10 col-xs-offset-1">
       <table class="table table-striped">
         <thead>
           <tr>
@@ -23,6 +14,7 @@
             <th><h3>Author</h3></th>
             <th><h3>Content</h3></th>
             <th><h3>Image</h3></th>
+            <th><h3>Category</h3></th>
             <th><h3>Date</h3></th>
           </tr>
         </thead>
@@ -63,6 +55,9 @@
                 <% else %>
                      none
                 <% end %>
+              </td>
+              <td>
+                <%= article.category_id == 0 ? "カテゴリなし" : Category.find(article.category_id).name %>
               </td>
               <td>
                 <%= Article.find(article.id).created_at.strftime("%Y-%m-%d<br/>%H:%M:%S").html_safe %>
