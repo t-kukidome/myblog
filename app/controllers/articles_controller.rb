@@ -35,8 +35,12 @@ class ArticlesController < ApplicationController
   def create
     @article = Article.new(article_params)
     @article.userid = current_user.id
-    @category = params[:selectc].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find(params[:selectc])
-    @article.category_id = @category.id || 0
+    if params[:selectc].to_i == -1
+      @article.category_id = -1
+    else
+      @category = params[:selectc].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find(params[:selectc])
+      @article.category_id = @category.id || -1
+    end
 
     if @article.save
       redirect_to articles_path, notice: "Article Created"
