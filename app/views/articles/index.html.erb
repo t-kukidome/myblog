@@ -53,10 +53,11 @@
                 <% if article.picture? %>
                     <%= image_tag article.picture.url, size: "50x30", class: "img-responsive" %>
                 <% else %>
-                     none
+                     <%= image_tag 'noimage.jpg', size: "50x30", class: "img-responsive" %>
                 <% end %>
               </td>
               <td>
+                <% article.category_id = 0 if article.category_id == 49 || article.category_id == 66 || article.category_id == 63 %>
                 <%= article.category_id == 0 ? "カテゴリなし" : Category.find(article.category_id).name %>
               </td>
               <td>

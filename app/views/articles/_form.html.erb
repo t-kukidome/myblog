@@ -44,16 +44,27 @@
       <%= f.file_field :picture %>
     </div>
 
-   <div class="form-group">
-     <strong>Category</strong> (カテゴリを追加したい場合は'Add Category'を選択してください)
-     <span>
-        <% categories_array = Category.all.map { |category| [category.name, category.id] } %>
-        <% categories_array = categories_array + [["[Add Category]", 0]] %>
-        <% options_for_select(categories_array) %><br/>
-        <%= select_tag('selectc', options_for_select(categories_array), include_blank: true) %>
-        <span id="addc" class="form-group"></span>
-     </span>
-   </div>
+     <div class="row">
+       <div class="form-group">
+         <div class="col-xs-7">
+           <%= f.label :category, "Category" %><br>
+           <% if params[:action] == "edit" %>
+             <p><%= @article.category&.name || "カテゴリなし" %></p>
+           <% end %>
+           (カテゴリを追加したい場合は'Add Category'を選択してください)
+           <span>
+             <% categories_array = Category.all.map { |category| [category.name, category.id] } %>
+             <% categories_array = categories_array + [["[Add Category]", 0]] %>
+             <% options_for_select(categories_array) %><br/>
+             <%= select_tag('selectc', options_for_select(categories_array), include_blank: "選択してください") %>
+           <span id="addc" class="form-group"></span>
+           </span>
+         </div>
+        </div>
+     </div>
+     <div class="form-group">
+
+     </div>
 
     <script>
       var selectc = document.getElementById("selectc");

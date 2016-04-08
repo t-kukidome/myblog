@@ -35,11 +35,11 @@ class ArticlesController < ApplicationController
   def create
     @article = Article.new(article_params)
     @article.userid = current_user.id
-    @category = params[:selectc].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find(params[:selectc].to_i)
+    @category = params[:selectc].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find(params[:selectc])
     @article.category_id = @category.id || 0
 
     if @article.save
-       redirect_to articles_path, notice: "Article Created"
+      redirect_to articles_path, notice: "Article Created"
     else
       p @article.errors.messages
        render 'new'
@@ -48,15 +48,32 @@ class ArticlesController < ApplicationController
 
   def edit
     if current_user.id != Article.find(params[:id]).userid
-        redirect_to articles_path, alert: "You cannot edit this article."
+      redirect_to articles_path, alert: "You cannot edit this article."
     else
-     @article = Article.find(params[:id])
+    @article = Article.find(params[:id])
+    @category = Category.new
     end
   end
 
   def update
-     @article = Article.find(params[:id])
-    if @article.update(article_params)
+    @article = Article.find(params[:id])
+    p @article
+    p "aaaaa"
+    #@category = Category.find(@article.category_id)
+    @article.assign_attributes(article_params)
+    p @article
+    p "bbbbbb"
+    if params[:selectc].to_i == 0
+      p "selectc == 0"
+      @category = Category.create(name: params[:addc])
+      @article.category_id = @category.id
+    else
+      @article.category_id = params[:selectc]
+    end
+
+    p @article
+    p "cccccc"
+    if @article.save
       redirect_to articles_path
     else
       render 'edit'
@@ -72,10 +89,6 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params[:article].permit(:title, :body, :category_id, :picture, :userid)
-  end
-
-  def category_params
-    params[:category].permit(:name, :userid)
+    params[:article].permit(:title, :body, :picture, :userid)
   end
 end
