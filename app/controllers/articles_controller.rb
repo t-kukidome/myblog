@@ -66,9 +66,9 @@ class ArticlesController < ApplicationController
     if params[:selectc].to_i == 0
       p "selectc == 0"
       @category = Category.create(name: params[:addc])
-      @article.category_id = @category.id
+      @article.category_id = @category.id || -1
     else
-      @article.category_id = params[:selectc]
+      @article.category_id = params[:selectc] || -1
     end
 
     p @article

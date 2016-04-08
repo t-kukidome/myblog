@@ -57,8 +57,7 @@
                 <% end %>
               </td>
               <td>
-                <% article.category_id = 0 if article.category_id == 49 || article.category_id == 66 || article.category_id == 63 %>
-                <%= article.category_id == 0 ? "カテゴリなし" : Category.find(article.category_id).name %>
+                <%= article.category_id == -1 ? "カテゴリなし" : Category.find(article.category_id).name %>
               </td>
               <td>
                 <%= Article.find(article.id).created_at.strftime("%Y-%m-%d<br/>%H:%M:%S").html_safe %>
