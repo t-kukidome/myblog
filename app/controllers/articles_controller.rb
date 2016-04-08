@@ -3,36 +3,27 @@ class ArticlesController < ApplicationController
   before_action :authenticate_user!,  except: [:index, :show]
 
   def index
-    @articles = Article.page(params[:page]).per(10).order(:id).reverse_order
-    #@sarticles = Article.all
+    @articles = Article.page(params[:page]).per(10).order("id DESC")
     c = params[:q]
     if params[:mysearch]
       @articles = @articles.where("userid = ?", current_user.id).page(params[:page]).per(10).order(:id)
     end
     return if c.blank?
-    if c[:search] #まずはsearchに値が入ってるかどうか
-      #if @sarticles.where('title like ? or body like ?', c[:search], c[:search]).empty? == false  #title上で検索してヒットしたら格納されるので、空じゃなかったら
-         #@sarticles = @sarticles.where(['title like ?', "%#{c[:search]}%"]).page(params[:page]).per(10).order(:id)
-         p c[:search]
-         @articles = @articles.where("title LIKE ? OR body LIKE ?", "%#{c[:search]}%", "%#{c[:search]}%").page(params[:page]).per(10).order(:id)
-         #@articles = @sarticles
-      #end
-      #if @sarticles.where(['body like ?', "%#{c[:search]}%"]).empty? == false
-      # @sarticles = @sarticles.where(['body like ?', "%#{c[:search]}%"]).page(params[:page]).per(10).order(:id)
-      # @articles = @sarticles
-      #end
+    if c[:search]
+      keyword_array = c[:search].gsub(/[\s　]+/, "|")
+      p keyword_array
+      p "#{keyword_array}"
+      @articles = @articles.where("title similar to :word OR body similar to :word", word: "%(#{keyword_array})%")
     end
 
     if c[:csearch].blank? == false
       @articles = @articles.where("category_id = ?", c[:csearch]).page(params[:page]).per(10).order(:id)
       @category = Category.find(c[:csearch])
     end
-
   end
 
   def show
     @article = Article.find(params[:id])
-    #@category = Category.find(@article.category_id)
     @user = User.find(@article.userid)
   end
 
@@ -52,6 +43,7 @@ class ArticlesController < ApplicationController
     if @article.save
        redirect_to articles_path, notice: "Article Created"
     else
+      p @article.errors.messages
        render 'new'
     end
   end

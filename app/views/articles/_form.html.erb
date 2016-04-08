@@ -1,18 +1,18 @@
 <!-- エラーメッセージ -->
 <% if @article.errors.any? %>
-      <% @article.errors.full_messages.each do |msg| %>
+      <% @article.errors.messages.each_value do |value| %>
         <div class="row">
           <div class="col-xs-3">
-            <div class="alert alert-danger"><%= msg %></div>
+            <div class="alert alert-danger"><%= value[0] %></div>
           </div>
         </div>
       <% end %>
 <% end %>
 <% if @category.errors.any? %>
-      <% @category.errors.full_messages.each do |msg| %>
+      <% @category.errors.messages.each do |key, value| %>
         <div class="row">
           <div class="col-xs-3">
-            <div class="alert alert-danger"><%= msg %></div>
+            <div class="alert alert-danger"><%= value[0] %></div>
           </div>
         </div>
       <% end %>
