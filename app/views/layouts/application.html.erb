@@ -13,25 +13,20 @@
 <body>
 <div id ="wrap">
   <div class="container">
-      <%= render 'layouts/header' %>
-
+    <%= render 'layouts/header' %>
       <% if notice %>
-      <div class="alert alert-success alert-dismissible">
+        <div class="alert alert-success alert-dismissible">
           <%= notice %><button type="button" class="close" data-dismiss="alert">&times;</button>
-      </div>
+        </div>
       <% end %>
       <% if alert %>
       <div class="alert alert-danger alert-dismissible">
-          <%= alert %><button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= alert %><button type="button" class="close" data-dismiss="alert">&times;</button>
       </div>
       <% end %>
 
       <%= yield %>
-
-      <script>
-        console.log(window.outerHeight);
-      </script>
-    </div>
+  </div>
 </div>
 <footer>
   <div class="container">

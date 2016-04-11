@@ -3,15 +3,12 @@
 </h4>
   <%=@article.title %><br/>
 <h4>Content</h4>
-<%= @article.body %>
-
-
+  <%= @article.body %>
 <h4>Image</h4>
   <% if @article.picture? %>
     <%= image_tag @article.picture.url ,size: "200x200" %>
   <% else %>
     none
   <% end %>
-
 <h4>Category</h4>
   <%= @article.category_id == -1 ? "カテゴリなし" : @article.category.name %>

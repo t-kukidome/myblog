@@ -9,10 +9,9 @@ class ArticlesController < ApplicationController
       @articles = @articles.where("userid = ?", current_user.id).page(params[:page]).per(10).order(:id)
     end
     return if c.blank?
+
     if c[:search]
       keyword_array = c[:search].gsub(/[\s　]+/, "|")
-      p keyword_array
-      p "#{keyword_array}"
       @articles = @articles.where("title similar to :word OR body similar to :word", word: "%(#{keyword_array})%")
     end
     if c[:csearch].blank? == false
@@ -36,7 +35,7 @@ class ArticlesController < ApplicationController
     @article = Article.new(article_params)
     @article.userid = current_user.id
     if params[:selectc].to_i == -1
-      @article.category_id = -1
+      @article.category_id = -1  
     else
       @category = params[:selectc].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find(params[:selectc])
       @article.category_id = @category.id || -1
@@ -45,7 +44,6 @@ class ArticlesController < ApplicationController
     if @article.save
       redirect_to articles_path, notice: "Article Created"
     else
-      p @article.errors.messages
        render 'new'
     end
   end
@@ -61,22 +59,13 @@ class ArticlesController < ApplicationController
 
   def update
     @article = Article.find(params[:id])
-    p @article
-    p "aaaaa"
-    #@category = Category.find(@article.category_id)
     @article.assign_attributes(article_params)
-    p @article
-    p "bbbbbb"
     if params[:selectc].to_i == 0
-      p "selectc == 0"
       @category = Category.create(name: params[:addc])
       @article.category_id = @category.id || -1
     else
       @article.category_id = params[:selectc] || -1
     end
-
-    p @article
-    p "cccccc"
     if @article.save
       redirect_to articles_path
     else
@@ -93,6 +82,6 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params[:article].permit(:title, :body, :picture, :userid)
+    params[:article].permit(:title, :body, :picture)
   end
 end
