@@ -27,7 +27,7 @@
             <td>
               <%= link_to article.title, article_path(article.id) %>
               <% if user_signed_in? %>
-                <% if current_user.id == article.userid %><br>
+                <% if current_user.id == article.user_id %><br>
                   <div class="btn-group btn-group-xs">
                     <%= link_to "Edit", edit_article_path(article.id), :class => "btn btn-warning" %>
                     <%= link_to "Delete", article_path(article.id), :class => "btn btn-danger", method: :delete, data: {
@@ -37,7 +37,7 @@
               <% end %>
             </td>
             <td>
-              <%= User.find(article.userid).username %>
+              <%= article.user.username %>
             </td>
             <td>
               <% if article.body.size > 15 %>
