@@ -6,7 +6,7 @@ class ArticlesController < ApplicationController
     @articles = Article.all.includes(:category, :user).page(params[:page]).per(10).order("id DESC")
     c = params[:q]
     if params[:mysearch]
-      @articles = @articles.where("userid = ?", current_user.id)
+      @articles = @articles.where("user_id = ?", current_user.id)
     end
 
     return if c.nil?
@@ -15,14 +15,14 @@ class ArticlesController < ApplicationController
       @articles = @articles.where("title similar to :word OR body similar to :word", word: "%(#{keyword_array})%")
     end
     if c[:csearch].blank? == false
-      @articles = @articles.where("caraitegory_id = ?", c[:csearch])
+      @articles = @articles.where("category_id = ?", c[:csearch])
       @category = Category.find(c[:csearch])
     end
   end
 
   def show
     @article = Article.find(params[:id])
-    @user = User.find(@article.userid)
+    @user = User.find(@article.user_id)
   end
 
   def new
@@ -50,7 +50,7 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    if current_user.id != Article.find(params[:id]).userid
+    if current_user.id != Article.find(params[:id]).user_id
       redirect_to articles_path, alert: "You cannot edit this article."
     else
     @article = Article.find(params[:id])
