@@ -1,6 +1,6 @@
 <h1>カテゴリ編集</h1>
-<% @categories.find_each(batch_size: 10) do |category| %>
-  <%= category.id %>:<%= category.name %>(<%= Article.where("category_id = ?", category.id).count %>)
+<% @categories.each do |category| %>
+  <%= category.id %>:<%= category.name %>(<%= category.articles.count %>)
     <div class="btn-group btn-group-xs">
       <%= link_to "Delete", category_path(category.id), :class => "btn btn-danger", method: :delete, data: {
           confirm: "are you sure?"} %>

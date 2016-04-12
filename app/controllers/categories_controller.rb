@@ -7,7 +7,7 @@ class CategoriesController < ApplicationController
   end
 
   def new
-    @categories = Category.all
+    @categories = Category.all.includes(:articles)
   end
 
   def destroy

@@ -55,10 +55,10 @@
               <% end %>
             </td>
             <td>
-              <%= article.category_id == -1 ? "カテゴリなし" : Category.find_by(id: article.category_id).name %>
+              <%= article.category_id == -1 ? "カテゴリなし" : article.category.name %>
             </td>
             <td>
-              <%= Article.find(article.id).created_at.strftime("%Y-%m-%d<br/>%H:%M:%S").html_safe %>
+              <%= article.created_at.strftime("%Y-%m-%d<br/>%H:%M:%S").html_safe %>
             </td>
           </tr>
         <% end %>

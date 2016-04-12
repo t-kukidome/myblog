@@ -3,19 +3,19 @@ class ArticlesController < ApplicationController
   before_action :authenticate_user!,  except: [:index, :show]
 
   def index
-    @articles = Article.page(params[:page]).per(10).order("id DESC")
+    @articles = Article.all.includes(:category).page(params[:page]).per(10).order("id DESC")
     c = params[:q]
     if params[:mysearch]
-      @articles = @articles.where("userid = ?", current_user.id).page(params[:page]).per(10).order(:id)
+      @articles = @articles.where("userid = ?", current_user.id)
     end
-    return if c.blank?
 
+    return if c.nil?
     if c[:search]
       keyword_array = c[:search].gsub(/[\s　]+/, "|")
       @articles = @articles.where("title similar to :word OR body similar to :word", word: "%(#{keyword_array})%")
     end
     if c[:csearch].blank? == false
-      @articles = @articles.where("category_id = ?", c[:csearch]).page(params[:page]).per(10).order(:id)
+      @articles = @articles.where("category_id = ?", c[:csearch])
       @category = Category.find(c[:csearch])
     end
   end
@@ -35,7 +35,8 @@ class ArticlesController < ApplicationController
     @article = Article.new(article_params)
     @article.userid = current_user.id
     if params[:selectc].to_i == -1
-      @article.category_id = -1  
+      @article.category_id = -1
+      @category = Category.new
     else
       @category = params[:selectc].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find(params[:selectc])
       @article.category_id = @category.id || -1

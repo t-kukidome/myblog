@@ -5,4 +5,5 @@ class Article < ActiveRecord::Base
   validates :body, presence: {message: "本文を入力してください"}
 
   belongs_to :category
+  belongs_to :user
 end
