@@ -33,7 +33,7 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
-    @article.userid = current_user.id
+    @article.user_id = current_user.id
     if params[:selectc].to_i == -1
       @article.category_id = -1
       @category = Category.new
@@ -82,7 +82,7 @@ class ArticlesController < ApplicationController
 
   private
 
-  def article_params
-    params[:article].permit(:title, :body, :picture)
-  end
+    def article_params
+      params[:article].permit(:title, :body, :picture)
+    end
 end
