@@ -3,7 +3,7 @@ class ArticlesController < ApplicationController
   before_action :authenticate_user!,  except: [:index, :show]
 
   def index
-    @articles = Article.all.includes(:category, :user).page(params[:page]).per(10).order("id DESC")
+    @articles = Article.includes(:category, :user).page(params[:page]).per(10).order("id DESC")
     c = params[:q]
     if params[:mysearch]
       @articles = @articles.where("user_id = ?", current_user.id)
@@ -82,7 +82,7 @@ class ArticlesController < ApplicationController
 
   private
 
-    def article_params
-      params[:article].permit(:title, :body, :picture)
-    end
+  def article_params
+    params[:article].permit(:title, :body, :picture)
+  end
 end
