@@ -1,3 +1,5 @@
+<%= javascript_include_tag 'newcategory', 'data-turbolinks-track' => true %>
+
 <% if @article.errors.any? %>
   <% @article.errors.messages.each_value do |value| %>
     <div class="row">
