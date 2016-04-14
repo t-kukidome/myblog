@@ -1,5 +1,5 @@
 $(function () {
-  var selectc = document.getElementById("selectc");
+  var selectc = document.getElementById("cselect");
   if(selectc != null){
     selectc.addEventListener("change", function(){
       if(selectc.value == 0){
