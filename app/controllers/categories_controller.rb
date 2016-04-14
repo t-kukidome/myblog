@@ -10,6 +10,6 @@ class CategoriesController < ApplicationController
     @category = Category.find(params[:id])
     Article.where("category_id = ?", params[:id]).update_all(category_id: "-1")
     @category.destroy
-    redirect_to new_category_path
+    redirect_to categories_path
   end
 end
