@@ -1,0 +1,21 @@
+html,
+body {
+    height: 100%;
+    /* html と body 要素はパディングやマージンを持てません。*/
+}
+
+/* フッターを下部へ押しやるための、コンテンツのラッパー */
+#wrap {
+    min-height: 100%;
+    height: auto;
+    /* フッターの高さ分だけ、ネガティブインデントを指定 */
+    margin: 0 auto -60px;
+    /* フッターの高さ分だけ、パディングを指定 */
+    padding: 0 0 60px;
+}
+
+/* ここでフッターの高さを指定 */
+footer {
+    height: 60px;
+    background-color: #f5f5f5;
+}

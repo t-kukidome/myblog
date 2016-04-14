@@ -18,7 +18,7 @@
       <div>
         <%= form_tag  articles_path, :method => 'get', class: "navbar-form navbar-left" do %>
           <%= text_field_tag('q[search]',value= nil, placeholder: "Search Word...", class: "form-control") %>
-          <%= select_tag('q[csearch]', options_for_select(Category.pluck(:name, :id)), :include_blank => "Select Category",
+          <%= select_tag('q[csearch]', options_for_select(Category.order(:id).pluck(:name, :id)), :include_blank => "Select Category",
                           class: "btn btn-default btn-lg dropdown-toggle") %>
           <%= submit_tag "Search", class: "btn btn-primary" %>
         <% end %>

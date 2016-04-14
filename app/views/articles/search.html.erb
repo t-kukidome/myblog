@@ -1,7 +1,0 @@
-<h1>検索結果</h1>
-
-<% @article.each do |article| %>
-    <li>
-      <%= link_to article.title, article_path(article.id) %>
-    </li>
-<% end %>
