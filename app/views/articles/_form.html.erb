@@ -52,7 +52,7 @@
         　　<% categories_array = Category.all.order(:id).map { |category| [category.name, category.id] } %>
         　　<% categories_array = categories_array + [["[Add Category]", 0]] + [["選択してください", -1]]%>
         　　<% options_for_select(categories_array) %>
-        　　<%= select_tag('selectc', options_for_select(categories_array, @article.category_id || -1)) %>
+        　　<%= select_tag('cselect', options_for_select(categories_array, @article.category_id || -1)) %>
         　　<span id="addc" class="form-group"></span>
       　</span>
       </div>

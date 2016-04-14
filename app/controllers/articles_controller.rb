@@ -34,11 +34,11 @@ class ArticlesController < ApplicationController
   def create
     @article = Article.new(article_params)
     @article.user_id = current_user.id
-    if params[:selectc].to_i == -1
+    if params[:cselect].to_i == -1
       @article.category_id = -1
       @category = Category.new
     else
-      @category = params[:selectc].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find(params[:selectc])
+      @category = params[:cselect].to_i == 0 ? Category.find_or_create_by(name: params[:addc]) : Category.find(params[:cselect])
       @article.category_id = @category.id || -1
     end
 
@@ -61,11 +61,11 @@ class ArticlesController < ApplicationController
   def update
     @article = Article.find(params[:id])
     @article.assign_attributes(article_params)
-    if params[:selectc].to_i == 0
+    if params[:cselect].to_i == 0
       @category = Category.create(name: params[:addc])
       @article.category_id = @category.id || -1
     else
-      @article.category_id = params[:selectc] || -1
+      @article.category_id = params[:cselect] || -1
     end
     if @article.save
       redirect_to articles_path
